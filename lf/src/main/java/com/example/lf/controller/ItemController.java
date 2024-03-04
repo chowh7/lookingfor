@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.lf.model.ContactRepository;
 import com.example.lf.model.Item;
 import com.example.lf.model.ItemRepository;
 import com.example.lf.model.LocationRepository;
+import com.example.lf.service.FileStorageService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -33,6 +35,8 @@ public class ItemController {
 	private LocationRepository locationRepository;
 	@Autowired
 	private ContactRepository contactRepository;
+	@Autowired
+    private FileStorageService fileStorageService;
 	
 	@PostMapping("/items")
 	public ResponseEntity<Item> createItem(@RequestBody Item item){
@@ -43,6 +47,28 @@ public class ItemController {
 			return new ResponseEntity<>(newCourse, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/items/{id}/image")
+	public ResponseEntity<Item> uploadImage(@PathVariable("id") long id, @RequestParam("image") MultipartFile image){
+		if (!image.isEmpty()) {
+			try {				
+				Optional<Item> itemData = itemRepository.findById(id);
+				if (itemData.isPresent()) {
+					Item _item = itemData.get();
+					String filename = fileStorageService.store(image);
+					_item.setImage(filename);
+					itemRepository.save(_item);
+					return new ResponseEntity<>(_item, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
+			} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

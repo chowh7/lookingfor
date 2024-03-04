@@ -36,6 +36,8 @@ public class LfApplication {
 			itemRepository.save(new Item("Wallet", "Blue leather wallet", LocalDate.now(), "Blue", "Personal Acessories", "Active", "Lost", ZonedDateTime.now(), contact, location));
 			itemRepository.save(new Item("USB Flash Drive", "SanDisk 512GB Dual Flash Drive", LocalDate.now(), "Silver", "Electronics", "Active", "Lost", ZonedDateTime.now()));
 			itemRepository.save(new Item("Water Bottle", "1L water bottle", LocalDate.now(), "Black", "Sports & Outdoors", "Active", "Found", ZonedDateTime.now()));
+			itemRepository.save(new Item("Mobile Phone", "Samsung Galaxy S6", LocalDate.now(), "Black", "Electronics", "Active", "Lost", ZonedDateTime.now()));
+			itemRepository.save(new Item("Mobile Phone", "Samsung Galaxy S6", LocalDate.now(), "Black", "Electronics", "Active", "Found", ZonedDateTime.now(), "247d5ff3-7fd0-4f96-9a55-b2c6047d5e9c.jpg"));
 			itemRepository.findAll().forEach(System.out::println);
 
 		};
