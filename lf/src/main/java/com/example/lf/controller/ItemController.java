@@ -104,7 +104,7 @@ public class ItemController {
 	public ResponseEntity<List<Item>> getAllItems(@RequestParam(required = false) String itemType, String status){
 		try {
 			List<Item> items = new ArrayList<Item>();
-			if (itemType == null) {
+			if (itemType == null || status == null) {
 				itemRepository.findAll().forEach(items::add);
 			} else {
 				itemRepository.findByItemTypeAndStatus(itemType, status).forEach(items::add);
