@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ItemRepository extends JpaRepository<Item,Long> {
 	List<Item> findByItemTypeAndStatus(String itemType, String status);
 	
-	@Query("SELECT i FROM Item i WHERE i.itemType = :itemType AND i.status = :status AND (i.title LIKE %:keyword% OR i.description LIKE %:keyword%)")
+	@Query("SELECT i FROM Item i WHERE i.itemType = :itemType AND i.status = :status AND (LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(i.description) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<Item> findByKeyword(@Param("itemType") String itemType, 
                               @Param("status") String status, 
                               @Param("keyword") String keyword);
